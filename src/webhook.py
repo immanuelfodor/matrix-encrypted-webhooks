@@ -5,6 +5,7 @@ import os
 import sys
 import traceback
 
+from markdown import markdown
 from nio import (AsyncClient, AsyncClientConfig, LoginResponse, MatrixRoom,
                  RoomMessageText, SyncResponse)
 from termcolor import colored
@@ -29,10 +30,10 @@ class E2EEClient:
         with open(self.CONFIG_FILE, "w") as f:
             json.dump(
                 {
-                    "homeserver": homeserver,  # e.g. "https://matrix.example.org"
-                    "user_id": resp.user_id,  # e.g. "@user:example.org"
-                    "device_id": resp.device_id,  # device ID, 10 uppercase letters
-                    "access_token": resp.access_token  # cryptogr. access token
+                    'homeserver': homeserver,  # e.g. "https://matrix.example.org"
+                    'user_id': resp.user_id,  # e.g. "@user:example.org"
+                    'device_id': resp.device_id,  # device ID, 10 uppercase letters
+                    'access_token': resp.access_token  # cryptogr. access token
                 },
                 f
             )
@@ -88,9 +89,9 @@ class E2EEClient:
 
     async def login(self) -> None:
         if os.path.exists(self.CONFIG_FILE):
-            logging.info("Logging in using stored credentials.")
+            logging.info('Logging in using stored credentials.')
         else:
-            logging.info("First time use, did not find credential file.")
+            logging.info('First time use, did not find credential file.')
             await self._login_first_time()
             logging.info(
                 f"Logged in, credentials are stored under '{self.STORE_PATH}'.")
@@ -109,12 +110,15 @@ class E2EEClient:
         if not self.greeting_sent:
             self.greeting_sent = True
 
+            greeting = f"Hi, I'm up and runnig from **{os.environ['MATRIX_DEVICE']}**, waiting for webhooks!"
             await self.client.room_send(
                 room_id=os.environ['MATRIX_ROOMID'],
                 message_type="m.room.message",
                 content={
-                    "msgtype": "m.text",
-                    "body": "Hi, I'm up and runnig, waiting for webhooks!"
+                    'msgtype': 'm.text',
+                    'body': greeting,
+                    'format': 'org.matrix.custom.html',
+                    'formatted_body': markdown(greeting, extensions=['extra']),
                 },
                 ignore_unverified_devices=True
             )
@@ -131,7 +135,7 @@ class E2EEClient:
         await self.client.join(os.environ['MATRIX_ROOMID'])
         await self.client.joined_rooms()
 
-        logging.info("Ready and waiting for events.")
+        logging.info('Ready and waiting for events.')
 
         await self.client.sync_forever(timeout=300000, full_state=True)
 
@@ -153,5 +157,5 @@ except Exception:
     logging.critical(traceback.format_exc())
     sys.exit(1)
 except KeyboardInterrupt:
-    logging.critical("Received keyboard interrupt.")
+    logging.critical('Received keyboard interrupt.')
     sys.exit(0)

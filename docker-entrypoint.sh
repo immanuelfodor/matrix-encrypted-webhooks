@@ -2,8 +2,8 @@
 
 # useful when running the script locally in a virtualenv,
 # otherwise, the OS env is already populated in the container
-if [ -f ".env" ] ; then
-    echo "Environment file found, sourcing it..." 
+if [ -f '.env' ] ; then
+    echo 'Environment file found, sourcing it...'
 
     set -a
     . ./.env
@@ -13,4 +13,5 @@ if [ -f ".env" ] ; then
     export LOGIN_STORE_PATH=./store
 fi
 
+echo 'Starting the Python app...'
 python src/webhook.py
