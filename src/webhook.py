@@ -164,18 +164,18 @@ class WebhookServer:
         self.matrix_client = matrix_client
         self.WEBHOOK_PORT = int(os.environ.get('WEBHOOK_PORT', 8000))
 
-    def _format_message(self, msg_format: str, data) -> str:
+    def _format_message(self, msg_format: str, allow_unicode: bool, data) -> str:
         if msg_format == 'json':
-            # ensure_ascii=False allows unicode chars
-            return json.dumps(data, indent=2)
+            return json.dumps(data, indent=2, ensure_ascii=(not allow_unicode))
         if msg_format == 'yaml':
-            return yaml.dump(data, indent=2, allow_unicode=True)
+            return yaml.dump(data, indent=2, allow_unicode=allow_unicode)
 
     async def _get_index(self, request: web.Request) -> web.Response:
         return web.json_response({'message': 'OK'})
 
     async def _post_hook(self, request: web.Request) -> web.Response:
         message_format = os.environ['MESSAGE_FORMAT']
+        allow_unicode = os.environ['ALLOW_UNICODE'] == 'True'
 
         logging.debug(f"Headers: {request.headers}")
 
@@ -197,7 +197,7 @@ class WebhookServer:
             finally:
                 logging.debug(f"Decoded data: {data}")
 
-            data = self._format_message(message_format, data)
+            data = self._format_message(message_format, allow_unicode, data)
 
         logging.debug(f"{message_format.upper()} formatted data: {data}")
         await self.matrix_client.send_message(data)

@@ -24,6 +24,7 @@ ENV MATRIX_ROOMID=!myroomid:matrix.example.org
 ENV MATRIX_DEVICE=any-device-name
 ENV MESSAGE_FORMAT=yaml
 ENV USE_MARKDOWN=False
+ENV ALLOW_UNICODE=True
 
 # run as a non-root user, @see: https://busybox.net/downloads/BusyBox.html#adduser
 RUN set -x \
