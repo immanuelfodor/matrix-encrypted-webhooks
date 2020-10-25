@@ -9,7 +9,7 @@ if [ -f '.env' ] ; then
     . ./.env
     set +a
 
-    export PYTHON_LOG_LEVEL=info
+    export PYTHON_LOG_LEVEL=debug
     export LOGIN_STORE_PATH=./store
 fi
 

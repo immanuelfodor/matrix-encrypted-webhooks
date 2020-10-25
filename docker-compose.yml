@@ -6,10 +6,7 @@ services:
     image: matrix-e2ee-webhook:master
     container_name: matrix-e2ee-webhook
     restart: unless-stopped
-    environment:
-      - MATRIX_SERVER=${MATRIX_SERVER}
-      - MATRIX_SSLVERIFY=${MATRIX_SSLVERIFY}
-      - MATRIX_USERID=${MATRIX_USERID}
-      - MATRIX_PASSWORD=${MATRIX_PASSWORD}
-      - MATRIX_ROOMID=${MATRIX_ROOMID}
-      - MATRIX_DEVICE=${MATRIX_DEVICE}
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
