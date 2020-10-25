@@ -1,0 +1,5 @@
+{
+    "python.venvPath": "./venv",
+    "python.pythonPath": "./venv/bin/python3.8",
+    "python.linting.pylintPath": "./venv/bin/pylint"
+}

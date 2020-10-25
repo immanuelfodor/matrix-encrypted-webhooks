@@ -1,0 +1,4 @@
+termcolor
+markdown
+pyyaml
+matrix-nio[e2e]
