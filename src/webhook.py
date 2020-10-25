@@ -13,7 +13,7 @@ from termcolor import colored
 
 class E2EEClient:
     def __init__(self):
-        self.STORE_PATH = os.environ['LOGIN_STORE_PATH']
+        self.STORE_PATH = os.environ.get('LOGIN_STORE_PATH', '/config')
         self.CONFIG_FILE = f"{self.STORE_PATH}/credentials.json"
 
         self.client: AsyncClient = None
@@ -143,7 +143,7 @@ class E2EEClient:
 async def main() -> None:
     logging.basicConfig(
         level=logging.getLevelName(
-            os.environ['PYTHON_LOG_LEVEL'].upper()),
+            os.environ.get('PYTHON_LOG_LEVEL', 'info').upper()),
         format='%(asctime)s | %(levelname)s | module:%(name)s | %(message)s'
     )
 

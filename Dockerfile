@@ -15,9 +15,6 @@ RUN set -x \
     && apk add --no-cache olm
 
 ENV PYTHONUNBUFFERED=1
-ENV PYTHON_LOG_LEVEL=info
-ENV LOGIN_STORE_PATH=/config
-
 ENV MATRIX_SERVER=https://matrix.example.org
 ENV MATRIX_SSLVERIFY=True
 ENV MATRIX_USERID=@myhook:matrix.example.org
