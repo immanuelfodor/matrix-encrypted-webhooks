@@ -16,15 +16,18 @@ RUN set -x \
 
 ENV PYTHONUNBUFFERED=1
 ENV LOGIN_STORE_PATH=/config
+
+ENV MESSAGE_FORMAT=yaml
+ENV USE_MARKDOWN=False
+ENV ALLOW_UNICODE=True
+
 ENV MATRIX_SERVER=https://matrix.example.org
 ENV MATRIX_SSLVERIFY=True
 ENV MATRIX_USERID=@myhook:matrix.example.org
 ENV MATRIX_PASSWORD=mypassword
-ENV MATRIX_ROOMID=!myroomid:matrix.example.org
 ENV MATRIX_DEVICE=any-device-name
-ENV MESSAGE_FORMAT=yaml
-ENV USE_MARKDOWN=False
-ENV ALLOW_UNICODE=True
+ENV MATRIX_ADMIN_ROOM=!myroomid:matrix.example.org
+ENV KNOWN_TOKENS=
 
 # run as a non-root user, @see: https://busybox.net/downloads/BusyBox.html#adduser
 RUN set -x \

@@ -14,4 +14,4 @@ if [ -f '.env' ] ; then
 fi
 
 echo 'Starting the Python app...'
-python src/webhook.py
+python src/main.py
