@@ -1,17 +1,8 @@
 import asyncio
-import json
 import logging
 import os
 import sys
 import traceback
-from typing import Optional
-
-import yaml
-from aiohttp import web
-from markdown import markdown
-from nio import (AsyncClient, AsyncClientConfig, LoginResponse, MatrixRoom,
-                 RoomMessageText, SyncResponse)
-from termcolor import colored
 
 from E2EEClient import E2EEClient
 from WebhookServer import WebhookServer
