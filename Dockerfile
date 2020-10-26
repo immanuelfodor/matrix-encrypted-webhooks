@@ -14,6 +14,8 @@ RUN set -x \
 RUN set -x \
     && apk add --no-cache olm
 
+EXPOSE 8000
+
 ENV PYTHONUNBUFFERED=1
 ENV LOGIN_STORE_PATH=/config
 
@@ -36,9 +38,7 @@ RUN set -x \
     && chown -R matrix. "${LOGIN_STORE_PATH}"
 
 COPY docker-entrypoint.sh ./
-
 ENTRYPOINT [ "./docker-entrypoint.sh" ]
-EXPOSE 8000
 
 COPY src/ ./src/
 
