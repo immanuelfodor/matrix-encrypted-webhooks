@@ -6,7 +6,9 @@ services:
     image: matrix-e2ee-webhook:master
     container_name: matrix-e2ee-webhook
     restart: unless-stopped
-    ports:
-      - "8000:8000"
     env_file:
       - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./store:/config
