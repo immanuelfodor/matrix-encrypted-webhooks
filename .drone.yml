@@ -1,0 +1,118 @@
+---
+kind: pipeline
+type: docker
+name: build-master
+
+clone:
+  depth: 50
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+
+# @see: http://plugins.drone.io/drone-plugins/drone-docker/
+# @see: https://github.com/drone-plugins/drone-docker
+- name: build-harbor
+  image: plugins/docker
+  settings:
+    registry:
+      from_secret: harbor_registry_fqdn
+    repo:
+      from_secret: harbor_repo
+    username:
+      from_secret: harbor_robot_matrixe2ee_push_username
+    password:
+      from_secret: harbor_robot_matrixe2ee_push_password
+    dockerfile: Dockerfile
+    tags:
+      - master
+
+# @see: http://plugins.drone.io/drone-plugins/drone-docker/
+# @see: https://github.com/drone-plugins/drone-docker
+- name: build-dockerhub
+  image: plugins/docker
+  settings:
+    repo: immanuelfodor/matrix-e2ee-webhook
+    username: immanuelfodor
+    password:
+      from_secret: dockerhub_matrixe2ee_access_token
+    dockerfile: Dockerfile
+    tags:
+      - master
+
+# @see: http://plugins.drone.io/drone-plugins/drone-webhook/
+# @see: https://keel.sh/docs/#webhooks
+- name: deploy-k8s
+  image: plugins/webhook
+  settings:
+    urls:
+      from_secret: keel_webhook_url
+    content_type: application/json
+    template:
+      from_secret: keel_native_payload_repo_tag_master
+
+# @see: http://plugins.drone.io/drone-plugins/drone-webhook/
+- name: notify-done
+  image: plugins/webhook
+  failure: ignore
+  settings:
+    urls:
+      from_secret: done_webhook_url
+    content_type: application/json
+    template: |
+      {
+        "build": "{{ build.status }} @ {{ repo.owner }}/{{ repo.name }} on branch {{ build.branch }}",
+        "url": "{{ build.link }}"
+      }
+
+trigger:
+  branch:
+  - master
+  event:
+  - push
+
+---
+kind: pipeline
+type: docker
+name: build-release
+
+clone:
+  depth: 50
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+
+# @see: http://plugins.drone.io/drone-plugins/drone-docker/
+# @see: https://github.com/drone-plugins/drone-docker
+- name: build-dockerhub
+  image: plugins/docker
+  settings:
+    repo: immanuelfodor/matrix-e2ee-webhook
+    username: immanuelfodor
+    password:
+      from_secret: dockerhub_matrixe2ee_access_token
+    dockerfile: Dockerfile
+    auto_tag: true
+
+# @see: http://plugins.drone.io/drone-plugins/drone-webhook/
+- name: notify-done
+  image: plugins/webhook
+  failure: ignore
+  settings:
+    urls:
+      from_secret: done_webhook_url
+    content_type: application/json
+    template: |
+      {
+        "build": "{{ build.status }} @ {{ repo.owner }}/{{ repo.name }} on branch {{ build.branch }}",
+        "url": "{{ build.link }}"
+      }
+
+trigger:
+  event:
+  - tag
