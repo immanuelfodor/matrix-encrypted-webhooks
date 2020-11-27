@@ -27,7 +27,7 @@ steps:
       from_secret: harbor_robot_matrixe2ee_push_password
     dockerfile: Dockerfile
     tags:
-      - master
+      - main
 
 # @see: http://plugins.drone.io/drone-plugins/drone-docker/
 # @see: https://github.com/drone-plugins/drone-docker
@@ -40,7 +40,7 @@ steps:
       from_secret: dockerhub_matrixe2ee_access_token
     dockerfile: Dockerfile
     tags:
-      - master
+      - main
 
 # @see: http://plugins.drone.io/drone-plugins/drone-webhook/
 # @see: https://keel.sh/docs/#webhooks
