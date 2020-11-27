@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: build-master
+name: build-main
 
 clone:
   depth: 50
