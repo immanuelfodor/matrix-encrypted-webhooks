@@ -61,6 +61,7 @@ The gateway tries to join all of the specified rooms in the `.env` file on start
 - Message formatting via `MESSAGE_FORMAT`: `raw` | `json` | `yaml` (default)
 - Markdown formatting turned on or off via `USE_MARKDOWN`: `True` | `False` (default)
 - ASCII (e.g., `\u1234`) or Unicode characters (e.g., `ű`) in JSON or YAML content via `ALLOW_UNICODE`: `True` (default) | `False`
+- Include the sender app name in messages via `DISPLAY_APP_NAME`: `True` (default) | `False`
 
 ### Matrix connection parameters
 

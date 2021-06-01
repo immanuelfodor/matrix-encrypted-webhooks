@@ -125,9 +125,13 @@ class E2EEClient:
         if sync:
             await self.client.sync(timeout=3000, full_state=True)
 
+        msg_prefix = ""
+        if os.environ['DISPLAY_APP_NAME'] == 'True':
+            msg_prefix = f"**{sender}** says:  \n"
+
         content = {
             'msgtype': 'm.text',
-            'body': f"**{sender}** says:  \n{message}",
+            'body': f"{msg_prefix}{message}",
         }
         if os.environ['USE_MARKDOWN'] == 'True':
             # Markdown formatting removes YAML newlines if not padded with spaces,
@@ -136,7 +140,7 @@ class E2EEClient:
 
             content['format'] = 'org.matrix.custom.html'
             content['formatted_body'] = markdown(
-                f"**{sender}** says:  \n{message}", extensions=['extra'])
+                f"{msg_prefix}{message}", extensions=['extra'])
 
         await self.client.room_send(
             room_id=room,
